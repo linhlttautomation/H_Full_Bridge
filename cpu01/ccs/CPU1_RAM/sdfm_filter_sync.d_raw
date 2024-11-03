@@ -1,0 +1,10 @@
+sdfm_filter_sync.obj: C:/ti/c2000/C2000Ware_5_03_00_00/device_support/f2837xd/examples/cpu1/sdfm_filters_sync_cla/cpu01/sdfm_filter_sync.cla
+sdfm_filter_sync.obj: C:\ti\c2000\C2000Ware_5_03_00_00\device_support\f2837xd\examples\cpu1\sdfm_filters_sync_cla\cpu01\cla_sdfm_filter_sync_shared.h
+sdfm_filter_sync.obj: C:/ti/c2000/C2000Ware_5_03_00_00/device_support/f2837xd/common/include/F2837xD_Cla_defines.h
+sdfm_filter_sync.obj: C:/ti/c2000/C2000Ware_5_03_00_00/device_support/f2837xd/common/include/F2837xD_Cla_typedefs.h
+sdfm_filter_sync.obj: C:/ti/c2000/C2000Ware_5_03_00_00/device_support/f2837xd/headers/include/F2837xD_sdfm.h
+sdfm_filter_sync.obj: C:/ti/c2000/C2000Ware_5_03_00_00/device_support/f2837xd/headers/include/F2837xD_cla.h
+sdfm_filter_sync.obj: C:/ti/c2000/C2000Ware_5_03_00_00/device_support/f2837xd/headers/include/F2837xD_piectrl.h
+sdfm_filter_sync.obj: C:/ti/c2000/C2000Ware_5_03_00_00/device_support/f2837xd/common/include/F2837xD_sdfm_drivers.h
+sdfm_filter_sync.obj: C:/ti/c2000/C2000Ware_5_03_00_00/device_support/f2837xd/common/include/F2837xD_struct.h
+sdfm_filter_sync.obj: C:/ti/c2000/C2000Ware_5_03_00_00/device_support/f2837xd/headers/include/F2837xD_epwm.h
