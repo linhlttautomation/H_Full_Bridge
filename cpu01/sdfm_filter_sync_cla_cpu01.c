@@ -201,6 +201,66 @@ void PWM(int period, int deadtime)
 
     EDIS;
 }
+void ADCA_Init(void)
+{
+    Uint16 i;
+
+    EALLOW;
+
+    //
+    //write configurations
+    //
+    AdcaRegs.ADCCTL2.bit.PRESCALE = 6; //set ADCCLK divider to /4
+    //AdcSetMode(ADC_ADCA, ADC_RESOLUTION_12BIT, ADC_SIGNALMODE_SINGLE);
+
+    // Cấu hình độ phân giải và chế độ tín hiệu cho ADC A
+    AdcaRegs.ADCCTL2.bit.RESOLUTION = 0;  // 12-bit resolution
+    AdcaRegs.ADCCTL2.bit.SIGNALMODE = 0;  // Single-ended mode
+
+    //
+    //Set pulse positions to late
+    //
+    AdcaRegs.ADCCTL1.bit.INTPULSEPOS = 1;
+
+    //
+    //power up the ADC
+    //
+    AdcaRegs.ADCCTL1.bit.ADCPWDNZ = 1;
+
+    //
+    //delay for > 1ms to allow ADC time to power up
+    //
+    for(i = 0; i < 1000; i++)
+    {
+        asm("   RPT#255 || NOP");
+    }
+    EDIS;
+
+    EALLOW;
+    //
+    //Select the channels to convert and end of conversion flag ADCA
+    //
+    // ILoad
+    AdcaRegs.ADCSOC0CTL.bit.CHSEL = 0;          //SOC0 will convert pin A0 -> ILoad
+    AdcaRegs.ADCSOC0CTL.bit.ACQPS = 19;         //sample window is 20 SYSCLK cycles
+    AdcaRegs.ADCSOC0CTL.bit.TRIGSEL = 0x05;     //trigger on ePWM1 SOCA/C
+
+    // VLoad
+    AdcaRegs.ADCSOC1CTL.bit.CHSEL = 1;          //SOC1 will convert pin A1 -> VLoad
+    AdcaRegs.ADCSOC1CTL.bit.ACQPS = 19;         //sample window is 20 SYSCLK cycles
+    AdcaRegs.ADCSOC1CTL.bit.TRIGSEL = 0x05;     //trigger on ePWM1 SOCA/C
+
+    // Trigger CLA
+    AdcaRegs.ADCINTSOCSEL1.all = 0x0000;          // No ADCInterrupt will trigger SOCx
+    AdcaRegs.ADCINTSOCSEL2.all = 0x0000;
+    AdcaRegs.ADCINTSEL1N2.bit.INT1SEL = 1;      // EOC1 is trigger for ADCINT1
+    AdcaRegs.ADCINTSEL1N2.bit.INT1E = 1;        // enable ADC interrupt 1
+    AdcaRegs.ADCINTSEL1N2.bit.INT1CONT = 1;     // ADCINT1 pulses are generated whenever an EOC pulse is generated irrespective of whether the flag bit is cleared or not.
+                                                // 0 No further ADCINT2 pulses are generated until ADCINT2 flag (in ADCINTFLG register) is cleared by user.
+    AdcaRegs.ADCINTFLGCLR.bit.ADCINT1 = 1;      //make sure INT1 flag is cleared
+    EDIS;
+
+}
 //
 // Main
 //
@@ -309,12 +369,12 @@ int main(void)
 // Trigger Source for TASK1 of CLA1 = SDFM1
 //
 //    DmaClaSrcSelRegs.CLA1TASKSRCSEL1.bit.TASK1=CLA_TRIG_SD1INT;
-    DmaClaSrcSelRegs.CLA1TASKSRCSEL1.bit.TASK1 = 68; //Timer 0
+    DmaClaSrcSelRegs.CLA1TASKSRCSEL1.bit.TASK1 = 1; //ADCINA1
 //
 // Trigger Source for TASK1 of CLA1 = SDFM2
 //
 //    DmaClaSrcSelRegs.CLA1TASKSRCSEL1.bit.TASK2=CLA_TRIG_SD2INT;
-    DmaClaSrcSelRegs.CLA1TASKSRCSEL1.bit.TASK2 = 68; //Timer 0
+    DmaClaSrcSelRegs.CLA1TASKSRCSEL1.bit.TASK2 = 1; //ADCINA1
 //
 // Lock CLA1TASKSRCSEL1 register
 //
