@@ -58,6 +58,10 @@
 #include "setting.h"
 #include "SinPWM_CLA.h"
 #include "variables.h"
+#include "Ramp.h"
+#include "RAMP_GEN_CLA.h"
+#include "PWM_3T_CLA.h"
+#include "CLAmath.h"
 //
 // Whether MDEBUGSTOP needs to be compiled or not
 //
@@ -74,6 +78,24 @@ volatile CPU_TO_CLA CpuToCLA;
 
 #pragma DATA_SECTION(ClaToCPU,"Cla1ToCpuMsgRAM");
 volatile  CLA_TO_CPU ClaToCPU;
+
+#pragma DATA_SECTION(Spwm,"CLADataLS0");
+volatile SPWM_CLA Spwm;
+
+#pragma DATA_SECTION(rc1,"CLADataLS0");
+volatile RC_CLA rc1;
+
+#pragma DATA_SECTION(rg1,"CLADataLS0");
+volatile RAMP_GEN_CLA rg1;
+
+#pragma DATA_SECTION(rc_Ref,"CLADataLS0");
+volatile RC_CLA rc_Ref;
+
+#pragma DATA_SECTION(Us,"CLADataLS0");
+volatile float Us;
+
+#pragma DATA_SECTION(pwm,"CLADataLS0");
+volatile PWMGEN_3T_CLA pwm;
 
 short  Filter1_Result[MAX_SAMPLES];
 short  Filter2_Result[MAX_SAMPLES];
@@ -92,6 +114,40 @@ __mdebugstop();
 #endif
     TaskClaTask1 ++;
 
+#if(BUILDLEVEL == LEVEL1)
+
+    //Ramp f by rc1
+    rc1.TargetValue = 50.0/150.0;
+    RC_CLA_MACRO(rc1)
+
+    //Ramp f by rg1
+    rg1.Freq = 50.0/100.0;
+    RAMP_GEN_CLA_MACRO(rg1)
+
+    // Ramp Us
+    rc_Ref.TargetValue = 220.0/400.0;
+    RC_CLA_MACRO(rc_Ref)
+    Us = 1.414213562*rc_Ref.SetpointValue*CLAsinPU(rg1.Out);
+
+    Spwm.Usa   = Us;
+    Spwm.Usb   = Us;
+    Spwm.Udc   = 400.0/800.0;
+
+    Spwm.T1 = (1.0*400.0/800.0)*Spwm.Usa/(0.50*Spwm.Udc);
+    Spwm.T2 = (1.0*400.0/800.0)*Spwm.Usb/(0.50*Spwm.Udc);
+
+    Spwm.Ta = Spwm.T1/2.0 + 0.50;
+    Spwm.Tb = Spwm.T2/2.0 + 0.50;
+
+    if (Spwm.Ta < 0.0) Spwm.Ta = 0.0; else if(Spwm.Ta > 1.0) Spwm.Ta = 1.0;
+    if (Spwm.Tb < 0.0) Spwm.Tb = 0.0; else if(Spwm.Tb > 1.0) Spwm.Tb = 1.0;
+
+    pwm.MfuncA1 = Spwm.Ta;
+    pwm.MfuncA2 = Spwm.Tb;
+
+    EPwm1Regs.CMPA.bit.CMPA =(Uint16)(pwm.MfuncA1*pwm.PeriodMax);
+    EPwm2Regs.CMPA.bit.CMPA =(Uint16)(pwm.MfuncA2*pwm.PeriodMax);
+#endif
 
 }
 
@@ -163,6 +219,7 @@ __interrupt void Cla1Task7 ( void )
 __interrupt void Cla1Task8 ( void )
 {
     TaskClaTask1 = 0;
+    pwm.PeriodMax = 1000;
 }
 
 //

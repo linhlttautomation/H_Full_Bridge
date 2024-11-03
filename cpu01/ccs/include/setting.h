@@ -11,7 +11,7 @@
 #define     LEVEL1      1 //Vong ho
 #define     LEVEL2      2 //Dieu khien
 
-#define BUILD_LEVEL  LEVEL1
+#define BUILDLEVEL  LEVEL1
 
 #define ILoad  AdcaResultRegs.ADCRESULT0
 #define VLoad  AdcaResultRegs.ADCRESULT1

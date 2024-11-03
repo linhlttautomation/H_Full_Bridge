@@ -24,6 +24,8 @@ ORDERED_OBJS += \
 "./sdfm_filter_sync_cla_cpu01.obj" \
 "./sdfm_filter_sync.obj" \
 "C:/ti/c2000/C2000Ware_5_03_00_00/device_support/f2837xd/examples/cpu1/sdfm_filters_sync_cla/cpu01/2837x_RAM_SDFM_CLA_lnk_cpu1.cmd" \
+"../include/2837x_c1bootROM_CLADataROMSymbols_fpu32.lib" \
+"../include/cla1_math_library_fpu32.lib" \
 $(GEN_CMDS__FLAG) \
 -lrts2800_fpu32.lib \
 -lF2837xD_Headers_nonBIOS_cpu1.cmd \
@@ -37,7 +39,9 @@ RMDIR := RMDIR /S/Q
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir_vars.mk
+-include include/subdir_vars.mk
 -include subdir_rules.mk
+-include include/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -144,7 +148,7 @@ EXE_OUTPUTS__QUOTED += \
 all: H_Full_Bridge.out
 
 # Tool invocations
-H_Full_Bridge.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
+H_Full_Bridge.out: $(OBJS) $(CMD_SRCS) $(LIB_SRCS) $(GEN_CMDS)
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: C2000 Linker'
 	"C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/bin/cl2000" -v28 -ml -mt --float_support=fpu32 --cla_support=cla0 --advice:performance=all -g --define=CPU1 --display_error_number --diag_suppress=10063 --diag_suppress=10068 --diag_warning=225 --gen_func_subsections=on -z -m"H_Full_Bridge.map" --stack_size=0x100 --warn_sections -i"C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/lib" -i"C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/include" -i"C:/ti/c2000/C2000Ware_5_03_00_00/device_support/f2837xd/common/cmd" -i"C:/ti/c2000/C2000Ware_5_03_00_00/device_support/f2837xd/headers/cmd" --reread_libs --define=CLA_C=1 --display_error_number --xml_link_info="H_Full_Bridge_linkInfo.xml" --entry_point=code_start --rom_model -o "H_Full_Bridge.out" $(ORDERED_OBJS)

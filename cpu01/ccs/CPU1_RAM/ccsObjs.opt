@@ -12,6 +12,8 @@
 "./sdfm_filter_sync_cla_cpu01.obj"
 "./sdfm_filter_sync.obj"
 "C:/ti/c2000/C2000Ware_5_03_00_00/device_support/f2837xd/examples/cpu1/sdfm_filters_sync_cla/cpu01/2837x_RAM_SDFM_CLA_lnk_cpu1.cmd"
+"../include/2837x_c1bootROM_CLADataROMSymbols_fpu32.lib"
+"../include/cla1_math_library_fpu32.lib"
 -lrts2800_fpu32.lib
 -lF2837xD_Headers_nonBIOS_cpu1.cmd
 -llibc.a

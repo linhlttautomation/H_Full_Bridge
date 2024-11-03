@@ -1,7 +1,7 @@
 ******************************************************************************
              TMS320C2000 Linker PC v22.6.1                     
 ******************************************************************************
->> Linked Sun Nov  3 13:32:30 2024
+>> Linked Sun Nov  3 16:06:12 2024
 
 OUTPUT FILE NAME:   <H_Full_Bridge.out>
 ENTRY POINT SYMBOL: "code_start"  address: 00000000
@@ -14,7 +14,7 @@ MEMORY CONFIGURATION
 PAGE 0:
   BEGIN                 00000000   00000002  00000002  00000000  RWIX
   RAMM0                 00000122   000002de  000000ae  00000230  RWIX
-  RAMLS12345            00008800   00002800  0000004e  000027b2  RWIX
+  RAMLS12345            00008800   00002800  00000464  0000239c  RWIX
   RAMD0                 0000b000   00000800  00000800  00000000  RWIX
   RAMD1                 0000b800   00000800  000007fe  00000002  RWIX
   RAMGS1                0000d000   00001000  0000063f  000009c1  RWIX
@@ -110,7 +110,7 @@ PAGE 1:
   OUTPUTXBAR            00007a80   00000040  00000040  00000000  RWIX
   GPIOCTRL              00007c00   00000180  00000180  00000000  RWIX
   GPIODATA              00007f00   00000030  00000030  00000000  RWIX
-  RAMLS0                00008000   00000800  00000102  000006fe  RWIX
+  RAMLS0                00008000   00000800  000002ae  00000552  RWIX
   RAMLS2_1              00009000   00000400  00000400  00000000  RWIX
   RAMLS2_2              00009400   00000400  00000400  00000000  RWIX
   RAMLS3_1              00009800   00000400  00000400  00000000  RWIX
@@ -189,6 +189,17 @@ codestart
 *          0    000001cc    00000004     
                   000001cc    00000004     F2837xD_usDelay.obj (.TI.ramfunc)
 
+Cla1Prog   0    00008800    00000464     
+                  00008800    000003ec     sdfm_filter_sync.obj (Cla1Prog:_Cla1Task1)
+                  00008bec    00000038     cla1_math_library_fpu32.lib : CLAsinPU.obj (Cla1Prog:_CLAsinPU)
+                  00008c24    00000010     sdfm_filter_sync.obj (Cla1Prog:_Cla1Task8)
+                  00008c34    00000008     sdfm_filter_sync.obj (Cla1Prog:_Cla1Task2)
+                  00008c3c    00000008     sdfm_filter_sync.obj (Cla1Prog:_Cla1Task3)
+                  00008c44    00000008     sdfm_filter_sync.obj (Cla1Prog:_Cla1Task4)
+                  00008c4c    00000008     sdfm_filter_sync.obj (Cla1Prog:_Cla1Task5)
+                  00008c54    00000008     sdfm_filter_sync.obj (Cla1Prog:_Cla1Task6)
+                  00008c5c    00000008     sdfm_filter_sync.obj (Cla1Prog:_Cla1Task7)
+
 .stack     1    00000400    00000100     UNINITIALIZED
                   00000400    00000100     --HOLE--
 
@@ -231,6 +242,14 @@ DmaRegsFile
 Cla1RegsFile 
 *          1    00001400    0000003e     UNINITIALIZED
                   00001400    0000003e     F2837xD_GlobalVariableDefs.obj (Cla1RegsFile)
+
+Cla1ToCpuMsgRAM 
+*          1    00001480    00000074     UNINITIALIZED
+                  00001480    00000074     sdfm_filter_sync.obj (Cla1ToCpuMsgRAM)
+
+CpuToCla1MsgRAM 
+*          1    00001500    0000003a     UNINITIALIZED
+                  00001500    0000003a     sdfm_filter_sync.obj (CpuToCla1MsgRAM)
 
 Clb1LogicCfgRegsFile 
 *          1    00003000    0000003e     UNINITIALIZED
@@ -529,8 +548,15 @@ GpioDataRegsFile
                   00007f00    00000030     F2837xD_GlobalVariableDefs.obj (GpioDataRegsFile)
 
 CLAscratch 
-*          1    00008000    00000100     UNINITIALIZED
-                  00008000    00000100     --HOLE--
+*          1    00008156    00000100     UNINITIALIZED
+                  00008156    00000100     --HOLE--
+
+.bss_cla   1    000082aa    00000002     UNINITIALIZED
+                  000082aa    00000002     sdfm_filter_sync.obj (.bss_cla)
+
+.scratchpad 
+*          1    000082ac    00000002     UNINITIALIZED
+                  000082ac    00000002     cla1_math_library_fpu32.lib : CLAsinPU.obj (.scratchpad:Cla1Prog:_CLAsinPU)
 
 .ebss      1    0000e000    0000007d     UNINITIALIZED
                   0000e000    0000001e     F2837xD_struct.obj (.ebss:_TRIP_SEL)
@@ -551,23 +577,13 @@ CLAscratch
 .econst    1    0000f000    000001c0     
                   0000f000    000001c0     F2837xD_PieVect.obj (.econst:_PieVectTableInit)
 
-Cla1Prog   0    00008800    0000004e     
-                  00008800    00000012     sdfm_filter_sync.obj (Cla1Prog:_Cla1Task1)
-                  00008812    0000000c     sdfm_filter_sync.obj (Cla1Prog:_Cla1Task8)
-                  0000881e    00000008     sdfm_filter_sync.obj (Cla1Prog:_Cla1Task2)
-                  00008826    00000008     sdfm_filter_sync.obj (Cla1Prog:_Cla1Task3)
-                  0000882e    00000008     sdfm_filter_sync.obj (Cla1Prog:_Cla1Task4)
-                  00008836    00000008     sdfm_filter_sync.obj (Cla1Prog:_Cla1Task5)
-                  0000883e    00000008     sdfm_filter_sync.obj (Cla1Prog:_Cla1Task6)
-                  00008846    00000008     sdfm_filter_sync.obj (Cla1Prog:_Cla1Task7)
+CLA1mathTables 
+*          1    00008000    00000156     
+                  00008000    00000156     cla1_math_library_fpu32.lib : CLASinCosTable.obj (CLA1mathTables)
 
-Cla1ToCpuMsgRAM 
-*          1    00001480    00000074     UNINITIALIZED
-                  00001480    00000074     sdfm_filter_sync.obj (Cla1ToCpuMsgRAM)
-
-CpuToCla1MsgRAM 
-*          1    00001500    0000003a     UNINITIALIZED
-                  00001500    0000003a     sdfm_filter_sync.obj (CpuToCla1MsgRAM)
+CLADataLS0 
+*          1    00008256    00000054     UNINITIALIZED
+                  00008256    00000054     sdfm_filter_sync.obj (CLADataLS0)
 
 Filter1_RegsFile 
 *          1    00009000    00000400     
@@ -584,9 +600,6 @@ Filter3_RegsFile
 Filter4_RegsFile 
 *          1    00009c00    00000400     
                   00009c00    00000400     sdfm_filter_sync.obj (Filter4_RegsFile) [fill = 4444]
-
-.bss_cla   1    00008100    00000002     UNINITIALIZED
-                  00008100    00000002     sdfm_filter_sync.obj (.bss_cla)
 
 PieVectTableFile 
 *          1    00000d00    000001c0     UNINITIALIZED
@@ -900,7 +913,7 @@ MODULE SUMMARY
        ------                           ----   ----------------   ------------------
     .\
        F2837xD_GlobalVariableDefs.obj   0      0                  9870              
-       sdfm_filter_sync.obj             78     4096               176               
+       sdfm_filter_sync.obj             1068   4096               260               
        F2837xD_sdfm_drivers.obj         1841   0                  0                 
        F2837xD_DefaultISR.obj           1413   0                  0                 
        sdfm_filter_sync_cla_cpu01.obj   840    0                  1                 
@@ -912,7 +925,13 @@ MODULE SUMMARY
        F2837xD_CodeStartBranch.obj      10     0                  0                 
        F2837xD_usDelay.obj              4      0                  0                 
     +--+--------------------------------+------+------------------+--------------------+
-       Total:                           5395   4688               10161             
+       Total:                           6385   4688               10245             
+                                                                                    
+    ../include/cla1_math_library_fpu32.lib
+       CLASinCosTable.obj               0      342                0                 
+       CLAsinPU.obj                     56     0                  2                 
+    +--+--------------------------------+------+------------------+--------------------+
+       Total:                           56     342                2                 
                                                                                     
     C:/ti/ccs1250/ccs/tools/compiler/ti-cgt-c2000_22.6.1.LTS/lib/rts2800_fpu32.lib
        fs_div28.asm.obj                 136    0                  0                 
@@ -930,7 +949,7 @@ MODULE SUMMARY
                                                                                     
        Stack:                           0      0                  256               
     +--+--------------------------------+------+------------------+--------------------+
-       Grand Total:                     5777   4712               10427             
+       Grand Total:                     6823   5054               10513             
 
 
 GLOBAL DATA SYMBOLS: SORTED BY DATA PAGE
@@ -1093,7 +1112,36 @@ address     data page           name
 
 00007f00     1fc (00007f00)     _GpioDataRegs
 
-00008100     204 (00008100)     _TaskClaTask1
+00008000     200 (00008000)     _CLAsinTable
+00008000     200 (00008000)     _CLAsincosTable
+00008000     200 (00008000)     _CLAsincosTable_Sin0
+
+00008040     201 (00008040)     _CLAcosTable
+00008040     201 (00008040)     _CLAsincosTable_Cos0
+
+00008100     204 (00008100)     _CLAsinTableEnd
+
+00008142     205 (00008140)     _CLAcosTableEnd
+00008142     205 (00008140)     _CLAsincosTable_TABLE_SIZE
+00008144     205 (00008140)     _CLAsincosTable_TABLE_SIZEDivTwoPi
+00008146     205 (00008140)     _CLAsincosTable_TwoPiDivTABLE_SIZE
+00008148     205 (00008140)     _CLAsincosTable_TABLE_MASK
+0000814a     205 (00008140)     _CLAsincosTable_Coef0
+0000814c     205 (00008140)     _CLAsincosTable_Coef1
+0000814e     205 (00008140)     _CLAsincosTable_Coef1_pos
+00008150     205 (00008140)     _CLAsincosTable_Coef2
+00008152     205 (00008140)     _CLAsincosTable_Coef3
+00008154     205 (00008140)     _CLAsincosTable_Coef3_neg
+00008156     205 (00008140)     _CLAsincosTableEnd
+
+00008256     209 (00008240)     _Spwm
+0000826a     209 (00008240)     _rc1
+00008278     209 (00008240)     _rg1
+
+00008286     20a (00008280)     _rc_Ref
+00008294     20a (00008280)     _Us
+00008296     20a (00008280)     _pwm
+000082aa     20a (00008280)     _TaskClaTask1
 
 00009000     240 (00009000)     _Filter1_Result
 
@@ -1225,17 +1273,36 @@ abs   00000100  CLA_SCRATCHPAD_SIZE
 0     0000d200  _CLA_OVERFLOW_ISR                     
 0     0000d20a  _CLA_UNDERFLOW_ISR                    
 0     0000bd5d  _CLA_initCpu1Cla                      
+1     00008040  _CLAcosTable                          
+1     00008142  _CLAcosTableEnd                       
+0     00008bec  _CLAsinPU                             
+1     00008000  _CLAsinTable                          
+1     00008100  _CLAsinTableEnd                       
+1     00008000  _CLAsincosTable                       
+1     00008156  _CLAsincosTableEnd                    
+1     0000814a  _CLAsincosTable_Coef0                 
+1     0000814c  _CLAsincosTable_Coef1                 
+1     0000814e  _CLAsincosTable_Coef1_pos             
+1     00008150  _CLAsincosTable_Coef2                 
+1     00008152  _CLAsincosTable_Coef3                 
+1     00008154  _CLAsincosTable_Coef3_neg             
+1     00008040  _CLAsincosTable_Cos0                  
+1     00008000  _CLAsincosTable_Sin0                  
+1     00008148  _CLAsincosTable_TABLE_MASK            
+1     00008142  _CLAsincosTable_TABLE_SIZE            
+1     00008144  _CLAsincosTable_TABLE_SIZEDivTwoPi    
+1     00008146  _CLAsincosTable_TwoPiDivTABLE_SIZE    
 1     00048000  _CanaRegs                             
 1     0004a000  _CanbRegs                             
 1     00001400  _Cla1Regs                             
 0     00008800  _Cla1Task1                            
-0     0000881e  _Cla1Task2                            
-0     00008826  _Cla1Task3                            
-0     0000882e  _Cla1Task4                            
-0     00008836  _Cla1Task5                            
-0     0000883e  _Cla1Task6                            
-0     00008846  _Cla1Task7                            
-0     00008812  _Cla1Task8                            
+0     00008c34  _Cla1Task2                            
+0     00008c3c  _Cla1Task3                            
+0     00008c44  _Cla1Task4                            
+0     00008c4c  _Cla1Task5                            
+0     00008c54  _Cla1Task6                            
+0     00008c5c  _Cla1Task7                            
+0     00008c24  _Cla1Task8                            
 1     00001480  _ClaToCPU                             
 0     0000bde8  _Cla_initMemoryMap                    
 1     00003200  _Clb1DataExchRegs                     
@@ -1447,6 +1514,7 @@ abs   00000100  CLA_SCRATCHPAD_SIZE
 1     00006100  _SpiaRegs                             
 1     00006110  _SpibRegs                             
 1     00006120  _SpicRegs                             
+1     00008256  _Spwm                                 
 1     00007940  _SyncSocRegs                          
 0     0000d022  _SysIntOsc1Sel                        
 0     0000bfa2  _SysIntOsc2Sel                        
@@ -1455,7 +1523,7 @@ abs   00000100  CLA_SCRATCHPAD_SIZE
 0     0000d548  _TIMER1_ISR                           
 0     0000d552  _TIMER2_ISR                           
 1     0000e000  _TRIP_SEL                             
-1     00008100  _TaskClaTask1                         
+1     000082aa  _TaskClaTask1                         
 0     0000d55c  _UPPA_ISR                             
 0     0000d566  _USBA_ISR                             
 0     0000d570  _USER10_ISR                           
@@ -1472,6 +1540,7 @@ abs   00000100  CLA_SCRATCHPAD_SIZE
 0     0000d5de  _USER9_ISR                            
 1     000703c0  _UidRegs                              
 1     00006200  _UppRegs                              
+1     00008294  _Us                                   
 0     0000d5e8  _VCU_ISR                              
 0     0000d5f2  _WAKE_ISR                             
 1     00007000  _WdRegs                               
@@ -1520,6 +1589,10 @@ abs   ffffffff  ___text__
 1     0000e07c  _gPeripheralNumber                    
 0     0000b64a  _main                                 
 0     0000bf3e  _memcpy                               
+1     00008296  _pwm                                  
+1     0000826a  _rc1                                  
+1     00008286  _rc_Ref                               
+1     00008278  _rg1                                  
 abs   ffffffff  binit                                 
 0     00000122  cinit                                 
 0     00000000  code_start                            
@@ -1536,13 +1609,14 @@ page  address   name
 0     00000122  cinit                                 
 0     000001cc  _F28x_usDelay                         
 0     00008800  _Cla1Task1                            
-0     00008812  _Cla1Task8                            
-0     0000881e  _Cla1Task2                            
-0     00008826  _Cla1Task3                            
-0     0000882e  _Cla1Task4                            
-0     00008836  _Cla1Task5                            
-0     0000883e  _Cla1Task6                            
-0     00008846  _Cla1Task7                            
+0     00008bec  _CLAsinPU                             
+0     00008c24  _Cla1Task8                            
+0     00008c34  _Cla1Task2                            
+0     00008c3c  _Cla1Task3                            
+0     00008c44  _Cla1Task4                            
+0     00008c4c  _Cla1Task5                            
+0     00008c54  _Cla1Task6                            
+0     00008c5c  _Cla1Task7                            
 0     0000b000  _Sdfm_configureData_filter            
 0     0000b267  _Sdfm_configureComparator             
 0     0000b45b  _InitSysPll                           
@@ -1826,7 +1900,31 @@ page  address   name
 1     00007a80  _OutputXbarRegs                       
 1     00007c00  _GpioCtrlRegs                         
 1     00007f00  _GpioDataRegs                         
-1     00008100  _TaskClaTask1                         
+1     00008000  _CLAsinTable                          
+1     00008000  _CLAsincosTable                       
+1     00008000  _CLAsincosTable_Sin0                  
+1     00008040  _CLAcosTable                          
+1     00008040  _CLAsincosTable_Cos0                  
+1     00008100  _CLAsinTableEnd                       
+1     00008142  _CLAcosTableEnd                       
+1     00008142  _CLAsincosTable_TABLE_SIZE            
+1     00008144  _CLAsincosTable_TABLE_SIZEDivTwoPi    
+1     00008146  _CLAsincosTable_TwoPiDivTABLE_SIZE    
+1     00008148  _CLAsincosTable_TABLE_MASK            
+1     0000814a  _CLAsincosTable_Coef0                 
+1     0000814c  _CLAsincosTable_Coef1                 
+1     0000814e  _CLAsincosTable_Coef1_pos             
+1     00008150  _CLAsincosTable_Coef2                 
+1     00008152  _CLAsincosTable_Coef3                 
+1     00008154  _CLAsincosTable_Coef3_neg             
+1     00008156  _CLAsincosTableEnd                    
+1     00008256  _Spwm                                 
+1     0000826a  _rc1                                  
+1     00008278  _rg1                                  
+1     00008286  _rc_Ref                               
+1     00008294  _Us                                   
+1     00008296  _pwm                                  
+1     000082aa  _TaskClaTask1                         
 1     00009000  _Filter1_Result                       
 1     00009400  _Filter2_Result                       
 1     00009800  _Filter3_Result                       
@@ -1886,4 +1984,4 @@ abs   ffffffff  binit
 abs   ffffffff  etext                                 
 abs   ffffffff  pinit                                 
 
-[354 symbols]
+[379 symbols]
