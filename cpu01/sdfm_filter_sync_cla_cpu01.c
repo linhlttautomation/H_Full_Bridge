@@ -92,6 +92,9 @@
 #include "F2837xD_sdfm_drivers.h"
 #include "F2837xD_struct.h"
 #include "F2837xD_epwm.h"
+#include "F2837xD_adc.h"
+#include "setting.h"
+#include "variables.h"
 
 //
 // Defines
@@ -110,6 +113,12 @@ Uint16 gPeripheralNumber;
 //
 // Function Prototypes
 //
+// Khai bao cac bien share CPU --> CLA
+extern volatile CPU_TO_CLA CpuToCLA;
+
+// Khai bao cac bien share CPU --> CLA
+extern volatile CLA_TO_CPU ClaToCPU;
+
 void Sdfm_configurePins(Uint16);
 void Cla_initMemoryMap(void);
 void CLA_initCpu1Cla(void);

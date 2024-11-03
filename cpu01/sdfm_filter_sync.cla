@@ -54,7 +54,10 @@
 #include "F2837xD_sdfm_drivers.h"
 #include "F2837xD_struct.h"
 #include "F2837xD_epwm.h"
-
+#include "F2837xD_adc.h"
+#include "setting.h"
+#include "SinPWM_CLA.h"
+#include "variables.h"
 //
 // Whether MDEBUGSTOP needs to be compiled or not
 //
@@ -66,13 +69,18 @@
 #pragma DATA_SECTION(Filter3_Result,"Filter3_RegsFile");
 #pragma DATA_SECTION(Filter4_Result,"Filter4_RegsFile");
 
+#pragma DATA_SECTION(CpuToCLA,"CpuToCla1MsgRAM");
+volatile CPU_TO_CLA CpuToCLA;
+
+#pragma DATA_SECTION(ClaToCPU,"Cla1ToCpuMsgRAM");
+volatile  CLA_TO_CPU ClaToCPU;
+
 short  Filter1_Result[MAX_SAMPLES];
 short  Filter2_Result[MAX_SAMPLES];
 short  Filter3_Result[MAX_SAMPLES];
 short  Filter4_Result[MAX_SAMPLES];
 
-int16 loopCounter1;
-int16 loopCounter2;
+Uint32 TaskClaTask1;
 
 //
 // Task 1
@@ -82,6 +90,8 @@ __interrupt void Cla1Task1 ( void )
 #if (CLA_DEBUG==1)
 __mdebugstop();
 #endif
+    TaskClaTask1 ++;
+
 
 }
 
@@ -152,7 +162,7 @@ __interrupt void Cla1Task7 ( void )
 //
 __interrupt void Cla1Task8 ( void )
 {
-
+    TaskClaTask1 = 0;
 }
 
 //

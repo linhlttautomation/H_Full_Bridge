@@ -85,12 +85,12 @@ SECTIONS
    .econst          : > RAMGS3,    PAGE = 1
    .esysmem         : > RAMGS3,    PAGE = 1
    Filter_RegsFile  : > RAMGS0,	   PAGE = 1
-   
+   CLA1mathTables   : > RAMLS0,    PAGE = 1
     /* CLA specific sections */
    Cla1Prog         : > RAMLS12345, PAGE=0
 
    CLADataLS0		: > RAMLS0, PAGE=1
-   CLADataLS1		: > RAMLS0, PAGE=1
+   //CLADataLS1		: > RAMLS0, PAGE=1
 
    Cla1ToCpuMsgRAM  : > CLA1_MSGRAMLOW,   PAGE = 1
    CpuToCla1MsgRAM  : > CLA1_MSGRAMHIGH,  PAGE = 1
